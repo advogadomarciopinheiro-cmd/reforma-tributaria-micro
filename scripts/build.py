@@ -21,6 +21,7 @@ EMPRESA = "MM Consultoria Corporativa Ltda."
 CNPJ = "49.399.582/0001-10"
 EMAIL = "solucoescorporativasmm@gmail.com"
 PRECO = "R$ 200"
+CHAVE_PIX = "49.399.582/0001-10"  # chave Pix = CNPJ da empresa
 AFILIADOS = []  # preencher quando houver contas: [{"nome":..., "url":..., "texto":..., "setores":[...]}]
 
 e = html.escape
@@ -56,13 +57,17 @@ def fonte_link(key):
 def mailto(assunto, cnae_txt=""):
     corpo = (
         "Olá, quero o Check-up da Reforma Tributária (R$ 200).\n\n"
+        "Peço o atendimento pelo canal oficial de e-mail da MM Consultoria Corporativa Ltda.\n\n"
         f"Atividade / CNAE: {cnae_txt}\n"
-        "Regime atual (MEI, Simples, Lucro Presumido ou Real):\n"
-        "Vendo mais para empresas, para consumidor final ou para os dois?\n"
-        "Cidade/UF:\n\n"
-        "Não envie dados sensíveis nem documentos agora.\n\n"
+        "Regime atual (MEI, Simples Nacional, Lucro Presumido ou Lucro Real):\n"
+        "Faturamento aproximado (anual ou mensal, o que tiver):\n"
+        "Perfil de clientes: vendo mais para empresas (B2B), para consumidor final (B2C) ou para os dois?\n"
+        "Cidade/UF:\n"
+        "Minha pergunta ou situação específica:\n\n"
+        "Não envie dados sensíveis (documentos de identidade, senhas, dados de saúde) nem comprovantes nesta primeira mensagem.\n\n"
         "CONSENTIMENTO (obrigatório): autorizo a MM Consultoria Corporativa Ltda. (CNPJ 49.399.582/0001-10) "
-        "a usar meu nome, e-mail e as informações acima apenas para responder este pedido e enviar a proposta do Check-up. "
+        "a usar meu nome, e-mail e as informações deste e-mail para me atender por este canal, elaborar a resposta do Check-up, "
+        "enviar a cobrança via Pix no CNPJ da empresa quando o resultado estiver pronto, e enviar o PDF revisado após o comprovante. "
         "Posso revogar a qualquer momento respondendo REVOGAR.\n\n"
         "Novidades por e-mail (opcional, consentimento separado): escreva SIM aqui se quiser receber: ___\n"
     )
@@ -99,6 +104,9 @@ table{width:100%;border-collapse:collapse;font-size:.95rem}td,th{border-bottom:1
 ul.src li{margin:.3em 0}
 .ad-slot{border:1px dashed var(--line);border-radius:8px;padding:12px;margin:20px 0;background:#fff}
 .ad-slot .label{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+ol.fluxo{padding-left:1.25em}ol.fluxo li{margin:.6em 0}
+.pix{background:#fff;border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:6px;padding:12px 16px;margin:16px 0}
+.pix p{margin:.4em 0}
 footer{border-top:1px solid var(--line);background:#fff;padding:20px 0;font-size:.88rem;color:var(--muted)}
 footer a{color:var(--muted);margin-right:12px}
 """
@@ -133,7 +141,7 @@ def page(path, title, desc, body, extra_ld=None, crumbs=None):
 {body}
 </div></main>
 <footer><div class="wrap">
-<p><strong>{EMPRESA}</strong> · CNPJ {CNPJ} · Assessoria corporativa e consultoria tributária. Conteúdo informativo, sem vínculo com a Receita Federal, o CGIBS ou outros órgãos públicos.</p>
+<p><strong>{EMPRESA}</strong> · CNPJ {CNPJ} · Assessoria corporativa e consultoria tributária. Atendimento oficial somente por e-mail: <a href="mailto:{EMAIL}">{EMAIL}</a>. As páginas do diretório são informativas e não têm vínculo com a Receita Federal, o CGIBS ou outros órgãos públicos.</p>
 <p><a href="{url('check-up/')}">Check-up</a><a href="{url('aviso-legal/')}">Aviso legal</a><a href="{url('privacidade/')}">Privacidade</a><a href="{url('metodologia/')}">Metodologia e fontes</a><a href="mailto:{EMAIL}">{EMAIL}</a></p>
 <p>Este site não usa cookies nem ferramentas de rastreamento.</p>
 </div></footer>
@@ -160,11 +168,11 @@ def urgencia_box():
 
 
 def cta_box(cnae_txt=""):
-    assunto = "Check-up da Reforma Tributária" + (f" - CNAE {cnae_txt}" if cnae_txt else "")
+    assunto = "Check-up da Reforma Tributária" + (f" — {cnae_txt}" if cnae_txt else "")
     return f"""<div class="cta-box"><p><strong>Check-up da Reforma Tributária por {PRECO}</strong></p>
-<p>Um diagnóstico educacional da sua empresa: Simples (DAS) x Simples híbrido x regime regular, impacto para a sua atividade, premissas e fontes. Não substitui o seu contador.</p>
-<a class="btn" href="{e(mailto(assunto, cnae_txt))}">Pedir o check-up por e-mail</a> <a class="btn" href="{url('check-up/')}">Ver escopo e limites</a>
-<p class="small">O botão abre seu e-mail com um texto pronto. Ao enviar, você autoriza o uso dos dados só para responder ao pedido (<a style="color:#fff" href="{url('privacidade/')}">privacidade</a>).</p></div>"""
+<p>Um diagnóstico educacional da sua empresa, com resposta completa e resumo estruturado, entregue em PDF revisado. O atendimento oficial é somente por e-mail. Você só paga via Pix, no CNPJ da empresa, quando o resultado estiver pronto para envio. Não substitui o seu contador.</p>
+<a class="btn" href="{e(mailto(assunto, cnae_txt))}">Pedir o check-up por e-mail</a> <a class="btn" href="{url('check-up/')}">Ver o fluxo, o escopo e os limites</a>
+<p class="small">O botão abre seu e-mail com um texto pronto para {EMAIL}. Ao enviar, você autoriza o uso dos dados para o atendimento, a elaboração da resposta, a cobrança e o envio do PDF (<a style="color:#fff" href="{url('privacidade/')}">privacidade</a>).</p></div>"""
 
 
 def load_pub():
@@ -255,7 +263,11 @@ def cards(pages):
 
 def home(pages):
     org = {"@context": "https://schema.org", "@type": "Organization", "name": EMPRESA, "taxID": CNPJ,
-           "email": EMAIL, "url": abs_url(""), "description": "Assessoria corporativa e consultoria tributária para micro e pequenas empresas."}
+           "email": EMAIL, "url": abs_url(""),
+           "description": "Assessoria corporativa e consultoria tributária para micro e pequenas empresas. Atendimento oficial somente por e-mail.",
+           "contactPoint": {"@type": "ContactPoint", "contactType": "customer service", "email": EMAIL,
+                            "availableLanguage": ["Portuguese"],
+                            "description": "Canal oficial e exclusivo de atendimento: e-mail."}}
     web = {"@context": "https://schema.org", "@type": "WebSite", "name": SITE_NOME, "url": abs_url(""), "inLanguage": "pt-BR"}
     body = f"""
 <h1>A reforma tributária explicada pela sua atividade (CNAE)</h1>
@@ -271,10 +283,21 @@ def home(pages):
 <div class="card"><h3>3. Crédito virou argumento de venda</h3><p>Clientes empresariais no regime regular descontam o imposto pago nas compras. Isso pode pesar na escolha do regime de quem vende para empresas.</p></div>
 <div class="card"><h3>4. Alíquotas finais ainda não fixadas</h3><p>As alíquotas de referência dependem de fixação futura. Aqui marcamos o que está confirmado e o que <span class="pend">depende de regulamentação</span>.</p></div>
 </div>
+<h2>Atendimento oficial só por e-mail</h2>
+<p>A {EMPRESA} (CNPJ {CNPJ}) tem uma política de atendimento oficial e concentrada em um único canal, para acompanhar melhor cada cliente e manter um registro claro do que foi pedido e do que foi entregue. Esse canal é o e-mail <a href="mailto:{EMAIL}">{EMAIL}</a>. Pedidos de Check-up, dúvidas sobre o serviço, envio de comprovante e recebimento do PDF são feitos somente por e-mail.</p>
+<h2>Como funciona o Check-up de {PRECO}</h2>
+<ol class="fluxo">
+<li>Você envia por e-mail a sua dúvida ou situação: CNAE, regime atual, faturamento aproximado, perfil de clientes (B2B, B2C ou os dois) e a pergunta específica.</li>
+<li>Analisamos o caso e elaboramos a resposta completa, com um resumo estruturado.</li>
+<li>Quando o resultado estiver pronto, avisamos por e-mail e enviamos a cobrança via Pix no CNPJ da MM Consultoria. Nada é cobrado antes disso.</li>
+<li>Você paga e envia o comprovante por e-mail.</li>
+<li>Enviamos a resposta final em PDF revisado, no mesmo canal.</li>
+</ol>
+<p class="small">Pagamento somente via Pix na chave CNPJ {CHAVE_PIX}. Não pague para outra chave ou conta. <a href="{url('check-up/')}">Ver o fluxo completo, o escopo e os limites</a>.</p>
 {cta_box()}
 <h2>Fontes oficiais usadas</h2>
 <ul class="src"><li>{fonte_link('lc214')}</li><li>{fonte_link('ec132')}</li><li>{fonte_link('prsn')}</li><li>{fonte_link('cnae')}</li><li>{fonte_link('fato')}</li><li>{fonte_link('cgibs')}</li></ul>
-<p class="small">Site da {EMPRESA}, assessoria corporativa e consultoria tributária. Não somos órgão público nem escritório de contabilidade.</p>
+<p class="small">Site da {EMPRESA}, assessoria corporativa e consultoria tributária. Não somos órgão público nem escritório de contabilidade. Atendimento oficial somente por e-mail.</p>
 """
     page("", f"{SITE_NOME}: IBS, CBS e Simples Nacional por CNAE", "Guia da reforma tributária do consumo por atividade (CNAE) para ME, EPP e MEI: Simples, regime híbrido, créditos, prazos e fontes oficiais.", body, [org, web])
 
@@ -291,13 +314,55 @@ def atividades(pages):
 
 
 def checkup():
-    svc = {"@context": "https://schema.org", "@type": "Service", "name": "Check-up da Reforma Tributária",
-           "provider": {"@type": "Organization", "name": EMPRESA, "taxID": CNPJ, "email": EMAIL},
-           "areaServed": "BR", "serviceType": "Diagnóstico educacional sobre a reforma tributária do consumo",
-           "offers": {"@type": "Offer", "price": "200.00", "priceCurrency": "BRL", "url": abs_url("check-up/")}}
+    svc = {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Check-up da Reforma Tributária",
+        "description": (
+            "Diagnóstico educacional da reforma tributária do consumo, com resposta completa e resumo estruturado, "
+            "entregue em PDF revisado. Atendimento oficial somente por e-mail. O valor de R$ 200 é cobrado via Pix "
+            "no CNPJ da empresa somente quando o resultado estiver pronto para envio."
+        ),
+        "provider": {
+            "@type": "Organization",
+            "name": EMPRESA,
+            "taxID": CNPJ,
+            "email": EMAIL,
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "contactType": "customer service",
+                "email": EMAIL,
+                "availableLanguage": ["Portuguese"],
+                "description": "Canal oficial e exclusivo de atendimento: e-mail.",
+            },
+        },
+        "areaServed": "BR",
+        "serviceType": "Diagnóstico educacional e consultoria tributária por escrito sobre a reforma tributária do consumo",
+        "availableChannel": {
+            "@type": "ServiceChannel",
+            "serviceUrl": abs_url("check-up/"),
+            "availableLanguage": ["Portuguese"],
+            "disambiguatingDescription": "Atendimento oficial somente por e-mail.",
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "200.00",
+            "priceCurrency": "BRL",
+            "url": abs_url("check-up/"),
+            "name": "Check-up da Reforma Tributária",
+            "description": "R$ 200 por empresa (um CNPJ). Nada é cobrado antes de o resultado estar pronto para envio. Pagamento somente via Pix no CNPJ da prestadora.",
+            "acceptedPaymentMethod": {
+                "@type": "PaymentMethod",
+                "name": "Pix",
+                "identifier": CHAVE_PIX,
+                "description": f"Pix na chave CNPJ {CHAVE_PIX}, de titularidade da {EMPRESA}, enviado por e-mail somente quando o resultado estiver pronto para envio.",
+            },
+        },
+    }
     body = f"""
 <h1>Check-up da Reforma Tributária — {PRECO}</h1>
-<p class="lead">Um diagnóstico educacional, por escrito, de como a reforma do consumo afeta a sua empresa, com premissas e fontes explicadas.</p>
+<p class="lead">Um diagnóstico educacional, por escrito, de como a reforma do consumo afeta a sua empresa, com resposta completa, resumo estruturado, premissas e fontes. A resposta final é enviada em PDF revisado, só depois do pagamento.</p>
+<div class="card"><p><strong>Atendimento oficial somente por e-mail.</strong> A {EMPRESA} (CNPJ {CNPJ}) mantém uma política de atendimento oficial e concentrada neste canal, para acompanhar melhor cada cliente e registrar com clareza o que foi pedido e o que foi entregue. O único endereço é <a href="mailto:{EMAIL}">{EMAIL}</a>. Pedidos, dúvidas sobre o serviço, envio de comprovante e recebimento do PDF são feitos apenas por e-mail.</p></div>
 {urgencia_box()}
 <h2>O que está incluído</h2>
 <ul>
@@ -305,7 +370,7 @@ def checkup():
 <li>Leitura dos dispositivos da LC 214/2025 aplicáveis à sua atividade (CNAE) e aos principais produtos ou serviços que você vende.</li>
 <li>Análise do seu perfil de clientes (empresas x consumidor final) e do efeito dos créditos de IBS e CBS.</li>
 <li>Calendário dos prazos que importam para você, como a janela de março de 2027.</li>
-<li>Relatório com premissas, limites e links para as fontes oficiais.</li>
+<li>Resposta completa da sua pergunta, com um resumo estruturado, premissas, limites e links para as fontes oficiais, em PDF revisado.</li>
 </ul>
 <h2>O que não está incluído</h2>
 <ul>
@@ -320,38 +385,59 @@ def checkup():
 <li>As alíquotas de referência do IBS e da CBS ainda não foram fixadas. Por isso trabalhamos com cenários e deixamos explícito o que <span class="pend">depende de regulamentação</span>.</li>
 <li>A decisão final sobre o regime é sua, de preferência junto com o seu contador.</li>
 </ul>
-<h2>Como contratar</h2>
-<ol>
-<li>Clique em “Pedir o check-up por e-mail”. Seu e-mail abre com um texto pronto: preencha a atividade, o regime atual e o perfil de clientes. Não envie documentos nem dados sensíveis nessa etapa.</li>
-<li>Respondemos com a proposta: escopo, prazo de entrega e forma de pagamento. Nada é cobrado antes do seu aceite.</li>
-<li>Depois do aceite e do pagamento, pedimos as informações necessárias e entregamos o relatório por e-mail.</li>
+<h2>Como funciona, passo a passo</h2>
+<ol class="fluxo">
+<li><strong>Você envia a dúvida por e-mail.</strong> Use o botão abaixo ou escreva para <a href="mailto:{EMAIL}">{EMAIL}</a>. Informe a atividade (CNAE), o regime atual, o faturamento aproximado, o perfil de clientes (B2B, B2C ou os dois) e a pergunta ou situação específica. Não envie documentos nem dados sensíveis nesta etapa.</li>
+<li><strong>Elaboramos a resposta completa.</strong> Analisamos o seu caso e preparamos a consulta, com um resumo estruturado, premissas, limites e fontes oficiais.</li>
+<li><strong>Avisamos quando o resultado está pronto e enviamos a cobrança.</strong> Só nessa hora pedimos o pagamento, via Pix, na chave CNPJ da {EMPRESA} ({CHAVE_PIX}). Nada é cobrado antes disso.</li>
+<li><strong>Você paga e envia o comprovante por e-mail.</strong> Use o mesmo endereço <a href="mailto:{EMAIL}">{EMAIL}</a>.</li>
+<li><strong>Enviamos o PDF revisado.</strong> A resposta final vai no seu e-mail, em documento PDF conferido pela MM Consultoria.</li>
 </ol>
-<p class="small">Na contratação a distância, você pode desistir em até 7 dias (Código de Defesa do Consumidor, art. 49). Preço: {PRECO} por empresa (um CNPJ).</p>
+<div class="pix">
+<p><strong>Pagamento somente via Pix no CNPJ da empresa</strong></p>
+<p>Valor: {PRECO} por empresa (um CNPJ).<br>
+Tipo de chave: CNPJ<br>
+Chave Pix: <strong>{CHAVE_PIX}</strong><br>
+Favorecido: {EMPRESA}</p>
+<p>A cobrança é enviada por e-mail somente quando o resultado estiver pronto para ser encaminhado. Não pedimos pagamento antecipado para começar a análise.</p>
+</div>
+<div class="alert"><strong>Alerta antifraude:</strong> pague apenas a chave Pix indicada neste site e no e-mail enviado por <a href="mailto:{EMAIL}">{EMAIL}</a>. Essa chave é o CNPJ {CHAVE_PIX}, de titularidade da {EMPRESA}, e não deve ser substituída por outra chave, telefone, CPF, e-mail ou conta. Se alguém pedir outro dado de pagamento ou contato por outro canal, não pague e escreva para o nosso e-mail oficial.</div>
+<h2>Pagamento e direito de arrependimento</h2>
+<p>Como nada é cobrado enquanto o resultado não está pronto, você não assume compromisso financeiro ao enviar o pedido: se não quiser seguir, basta não pagar, e o PDF não é enviado.</p>
+<p>A contratação é feita a distância, por e-mail. O art. 49 do Código de Defesa do Consumidor assegura o direito de arrependimento em até 7 dias, contados do pagamento. Se você desistir nesse prazo <strong>antes</strong> do envio do PDF, devolvemos o valor integral, no mesmo Pix de origem, em até 7 dias úteis.</p>
+<p>O Check-up é um serviço intelectual personalizado, elaborado sob medida para a sua dúvida, e já está pronto no momento da cobrança. Ao pagar e enviar o comprovante, você pede o envio imediato desse resultado. Por isso, depois que o PDF for enviado, o direito de arrependimento do art. 49 pode não se aplicar. Falhas na prestação do serviço continuam cobertas pelas demais regras do CDC.</p>
 {cta_box()}
-<p class="small">Prestador: {EMPRESA}, CNPJ {CNPJ}, assessoria corporativa e consultoria tributária. Contato: <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
+<p class="small">Prestador: {EMPRESA}, CNPJ {CNPJ}, assessoria corporativa e consultoria tributária. Canal oficial de atendimento: <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
 """
-    page("check-up/", f"Check-up da Reforma Tributária por {PRECO} — ME, EPP e MEI", "Diagnóstico educacional da reforma tributária para micro e pequenas empresas: Simples x híbrido x regular, impacto por CNAE, premissas e fontes. R$ 200.", body, [svc],
+    page("check-up/", f"Check-up da Reforma Tributária por {PRECO} — ME, EPP e MEI", "Diagnóstico educacional da reforma tributária para micro e pequenas empresas, por e-mail: Simples x híbrido x regular, resposta em PDF revisado e pagamento via Pix de R$ 200 só quando o resultado estiver pronto.", body, [svc],
          crumbs=[("Início", ""), ("Check-up", None)])
 
 
 def aviso():
     body = f"""
 <h1>Aviso legal</h1>
+<p class="small">Atualizado em {hoje()}.</p>
 <p>Este site é mantido pela {EMPRESA} (CNPJ {CNPJ}), que atua em assessoria corporativa e consultoria tributária.</p>
-<h2>Conteúdo informativo</h2>
-<p>As páginas têm caráter informativo e educacional. Elas resumem a legislação e as orientações oficiais e não são consultoria individual, parecer jurídico ou serviço contábil. Situações concretas dependem de dados e documentos que estas páginas não analisam.</p>
+<h2>Canal oficial de atendimento</h2>
+<p>A {EMPRESA} tem uma política de atendimento oficial e concentrada em um único canal, para melhor atender o cliente e manter um registro claro de cada caso: o e-mail <a href="mailto:{EMAIL}">{EMAIL}</a>. Pedidos de Check-up, dúvidas sobre o serviço, cobrança, envio de comprovante e recebimento do PDF são feitos somente por esse endereço.</p>
+<h2>Conteúdo informativo do diretório</h2>
+<p>As páginas de atividades e de metodologia têm caráter informativo e educacional. Elas resumem a legislação e as orientações oficiais e, por si só, não são consultoria individual, parecer jurídico ou serviço contábil. Situações concretas dependem de dados e documentos que essas páginas não analisam.</p>
+<h2>O Check-up é um serviço individual</h2>
+<p>O Check-up descrito na página <a href="{url('check-up/')}">Check-up</a> é um serviço pago e individual, prestado somente por e-mail, nos termos daquela página: elaboramos a resposta completa da sua pergunta, com resumo estruturado, e enviamos o PDF revisado depois do pagamento via Pix no CNPJ da empresa, cobrado apenas quando o resultado estiver pronto para envio.</p>
 <h2>Sem garantia de resultado</h2>
-<p>Não prometemos nem garantimos economia de tributos ou qualquer resultado financeiro. A reforma ainda depende de regulamentação, e as regras podem mudar depois da data de cada página.</p>
+<p>Não prometemos nem garantimos economia de tributos ou qualquer resultado financeiro. A reforma ainda depende de regulamentação, e as regras podem mudar depois da data de cada página ou do relatório.</p>
+<h2>Pagamento</h2>
+<p>O único meio de pagamento do Check-up é o Pix na chave CNPJ {CHAVE_PIX}, de titularidade da {EMPRESA}, e nada é cobrado antes de avisarmos, por e-mail, que o resultado está pronto. Não pague para outra chave, telefone, CPF, e-mail ou conta.</p>
 <h2>Fontes e atualização</h2>
 <p>Usamos só fontes oficiais, citadas com link e data de consulta em cada página (veja <a href="{url('metodologia/')}">metodologia</a>). Se encontrar erro ou desatualização, escreva para <a href="mailto:{EMAIL}">{EMAIL}</a> e corrigimos.</p>
 <h2>Sem vínculo com órgãos públicos</h2>
 <p>Este site não é da Receita Federal, do Comitê Gestor do IBS, do Comitê Gestor do Simples Nacional, do IBGE ou de qualquer órgão público e não fala em nome deles.</p>
 <h2>Serviços contábeis</h2>
-<p>Escrituração, emissão de guias e entrega de declarações são atividades de profissional registrado no CRC e não são prestadas por meio deste site.</p>
+<p>Escrituração, emissão de guias e entrega de declarações são atividades de profissional registrado no CRC e não são prestadas por meio deste site nem no Check-up.</p>
 <h2>Publicidade</h2>
 <p>Se houver anúncios ou links de afiliado, eles aparecerão identificados com o rótulo “Publicidade”, como recomenda o CONAR. Hoje o site não tem anunciantes.</p>
 """
-    page("aviso-legal/", "Aviso legal — Reforma Tributária por Atividade", "Conteúdo informativo, sem consultoria individual e sem garantia de economia. Responsável: MM Consultoria Corporativa Ltda.", body,
+    page("aviso-legal/", "Aviso legal — Reforma Tributária por Atividade", "Conteúdo informativo do diretório, Check-up individual por e-mail, pagamento via Pix no CNPJ e limites do serviço. Responsável: MM Consultoria Corporativa Ltda.", body,
          crumbs=[("Início", ""), ("Aviso legal", None)])
 
 
@@ -360,26 +446,25 @@ def privacidade():
 <h1>Política de privacidade</h1>
 <p class="small">Atualizada em {hoje()}.</p>
 <h2>Quem é a controladora</h2>
-<p>{EMPRESA}, CNPJ {CNPJ}. Contato para assuntos de privacidade: <a href="mailto:{EMAIL}">{EMAIL}</a>.</p>
+<p>{EMPRESA}, CNPJ {CNPJ}. Contato para assuntos de privacidade: <a href="mailto:{EMAIL}">{EMAIL}</a>, que também é o canal oficial de atendimento.</p>
 <h2>Quais dados tratamos</h2>
-<p>O site não tem formulário, não usa cookies e não usa ferramentas de análise ou rastreamento. Só tratamos os dados que você nos envia por e-mail: nome, endereço de e-mail e as informações que escrever, como atividade, regime e cidade.</p>
+<p>O site não tem formulário, não usa cookies e não usa ferramentas de análise ou rastreamento. Só tratamos os dados que você nos envia por e-mail: nome, endereço de e-mail e as informações sobre a empresa e a dúvida (como CNAE, regime atual, faturamento aproximado, perfil de clientes e a pergunta específica) e, se houver contratação, o comprovante de pagamento.</p>
 <p>A hospedagem (GitHub Pages) pode registrar dados técnicos de acesso, como o endereço IP, para segurança e funcionamento do serviço, conforme a política do próprio GitHub.</p>
 <h2>Para que usamos e com qual base legal</h2>
 <ul>
-<li><strong>Responder seu pedido e enviar a proposta do Check-up:</strong> com base no seu consentimento (LGPD, art. 7º, I), dado ao enviar o e-mail com o texto de consentimento.</li>
-<li><strong>Prestar o serviço contratado:</strong> execução de contrato (LGPD, art. 7º, V), só se você contratar.</li>
+<li><strong>Atendimento por e-mail, elaboração da resposta, cobrança e envio do PDF:</strong> com base no seu consentimento (LGPD, art. 7º, I), dado ao enviar o e-mail com o texto de consentimento. Depois do pagamento, esses mesmos usos também se apoiam na execução do contrato (LGPD, art. 7º, V).</li>
 <li><strong>Enviar novidades sobre a reforma:</strong> só com consentimento separado e opcional (escrevendo SIM no campo indicado). Você pode pedir o check-up sem aceitar novidades.</li>
 </ul>
 <h2>Compartilhamento</h2>
-<p>Não vendemos nem cedemos seus dados. O e-mail é operado pelo provedor do nosso endereço (Google/Gmail), que atua como operador.</p>
+<p>Não vendemos nem cedemos seus dados. O e-mail é operado pelo provedor do nosso endereço (Google/Gmail), que atua como operador. A instituição financeira do Pix trata os dados do pagamento para liquidar a transação, na qualidade de prestadora desse serviço.</p>
 <h2>Por quanto tempo guardamos</h2>
-<p>Pelo tempo necessário para responder o pedido e prestar o serviço, ou até você revogar o consentimento. Depois disso, mantemos apenas o que a lei exigir.</p>
+<p>Guardamos os dados pelo tempo necessário ao atendimento por e-mail, à elaboração da resposta, à cobrança e ao envio do PDF. Depois da conclusão do serviço, mantemos apenas o que for razoável para cumprir obrigações legais, fiscais e de defesa em eventuais reclamações — em geral, até o prazo prescricional das relações de consumo (5 anos) ou outro prazo que a lei exigir. Você pode pedir a eliminação dos dados quando a lei permitir.</p>
 <h2>Seus direitos e como revogar</h2>
-<p>Você pode pedir confirmação, acesso, correção, eliminação e informações sobre o uso dos seus dados (LGPD, art. 18). Para revogar o consentimento, responda qualquer e-mail nosso com a palavra <strong>REVOGAR</strong> ou escreva para <a href="mailto:{EMAIL}?subject=REVOGAR">{EMAIL}</a>. Você também pode reclamar à Autoridade Nacional de Proteção de Dados (ANPD).</p>
+<p>Você pode pedir confirmação, acesso, correção, eliminação e informações sobre o uso dos seus dados (LGPD, art. 18). Para revogar o consentimento, responda qualquer e-mail nosso com a palavra <strong>REVOGAR</strong> ou escreva para <a href="mailto:{EMAIL}?subject=REVOGAR">{EMAIL}</a>. A revogação não atinge o tratamento que a lei nos obriga a manter, como registros fiscais do pagamento. Você também pode reclamar à Autoridade Nacional de Proteção de Dados (ANPD).</p>
 <h2>Cookies</h2>
 <p>Este site não usa cookies. Se isso mudar, esta política será atualizada e um aviso será exibido antes de qualquer cookie não essencial.</p>
 """
-    page("privacidade/", "Política de privacidade (LGPD) — Reforma Tributária por Atividade", "Como a MM Consultoria Corporativa Ltda. trata os dados enviados por e-mail: finalidades, consentimento, revogação e direitos (LGPD).", body,
+    page("privacidade/", "Política de privacidade (LGPD) — Reforma Tributária por Atividade", "Como a MM Consultoria Corporativa Ltda. trata os dados enviados por e-mail: atendimento, elaboração da resposta, cobrança, envio do PDF, retenção razoável e direitos (LGPD).", body,
          crumbs=[("Início", ""), ("Privacidade", None)])
 
 

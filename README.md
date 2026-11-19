@@ -11,6 +11,9 @@ para ME, EPP e MEI. Mantido pela MM Consultoria Corporativa Ltda. (CNPJ 49.399.5
 
 Publicado em https://advogadomarciopinheiro-cmd.github.io/reforma-tributaria-micro/
 
+O Check-up (R$ 200) é um serviço individual prestado somente por e-mail (solucoescorporativasmm@gmail.com).
+O pagamento é via Pix no CNPJ da empresa e só é cobrado quando o resultado está pronto para envio, em PDF revisado.
+
 Para baixar os dados brutos de novo:
 `curl -LO https://ftp.ibge.gov.br/Informacoes_Gerais_e_Referencia/Classificacoes/CNAE/cnae2_3/cnae_subclasses_2_3_xls.zip` em `data/raw/` e descompactar.
-Conteúdo informativo; não é consultoria individual.
+As páginas do diretório são informativas; o Check-up é a consultoria individual, nos termos da página /check-up/.
